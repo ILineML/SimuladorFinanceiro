@@ -25,36 +25,41 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form>
+        <form action="/entrar" method="get">
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Email address</label>
+              <input type="text" id="inputEmail" name="inputLogin" class="form-control" placeholder="Email ou Nome de Usuário" required="required" autofocus="autofocus">
+              <label for="inputEmail">Email ou Nome de Usuário</label>
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-              <label for="inputPassword">Password</label>
+              <input type="password" id="inputPassword" name="inputSenha" class="form-control" placeholder="Senha" required="required">
+              <label for="inputPassword">Senha</label>
             </div>
           </div>
           <div class="form-group">
             <div class="checkbox">
               <label>
                 <input type="checkbox" value="remember-me">
-                Remember Password
+                Lembrar senha
               </label>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="index.html">Login</a>
+          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="register.html">Register an Account</a>
-          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+          <a class="d-block small mt-3" href="/cadastro">Cadastrar-se</a>
+          <a class="d-block small" href="/esqueci-senha">Esqueceu sua senha?</a>
         </div>
       </div>
     </div>
   </div>
+
+  <#if verificacao ? has_content>
+    <h1>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h1>
+  </#if>
+
 
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
