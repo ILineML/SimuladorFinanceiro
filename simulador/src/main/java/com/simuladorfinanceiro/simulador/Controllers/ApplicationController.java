@@ -31,6 +31,11 @@ public class ApplicationController {
         return "forgot-password";
     }
 
+    @GetMapping("/cadReceita")
+    public String pageCadRec(){
+        return "cadReceita";
+    }
+
     @GetMapping("/index")
     public String pageIndex(){
         return "index";
@@ -71,6 +76,7 @@ public class ApplicationController {
             model.addAttribute("verificacao", 0);
             return "/login";
         } else{
+
             model.addAttribute("login", usuarioDAO.findLogin(login, senha));
             return "/charts";
         }
