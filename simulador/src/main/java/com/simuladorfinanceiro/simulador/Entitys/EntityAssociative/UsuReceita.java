@@ -8,22 +8,33 @@ import java.util.Date;
 
 @Entity
 @Table(name = "TBUSURECEITA")
-public class UsuReceita {
+public class UsuReceita{
+
+    @Id
+    @GeneratedValue
+    private Long UsuRecID;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsu")
     private Usuario fkUsuRec;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idReceita")
     private Receita fkReceita;
 
-    @Id
+    @Column(name = "mesAno")
     private Date ano;
-
-    @Column(name = "mes")
-    private Integer mes;
 
     @Column(name ="valorReceita")
     private Double valorReceita;
+
+    public Long getUsuRecID() {
+        return UsuRecID;
+    }
+
+    public void setUsuRecID(Long usuRecID) {
+        UsuRecID = usuRecID;
+    }
 
     public Usuario getFkUsuRec() {
         return fkUsuRec;
@@ -45,16 +56,8 @@ public class UsuReceita {
         return ano;
     }
 
-    public void setAno(Date ano) {
+        public void setAno(Date ano) {
         this.ano = ano;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
     }
 
     public Double getValorReceita() {

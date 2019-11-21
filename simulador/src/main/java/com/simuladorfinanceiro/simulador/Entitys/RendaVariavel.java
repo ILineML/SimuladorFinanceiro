@@ -1,9 +1,11 @@
 package com.simuladorfinanceiro.simulador.Entitys;
 
 
+import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuInvestimentos;
 import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuRendaVar;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
@@ -18,15 +20,16 @@ public class RendaVariavel {
     @Column(name = "rendaVariavel")
     private String rendaVariavel;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "mesAno")
-    private Date mesAno;
-
-    @Column(name = "valorRendVar")
-    private Double valorRendVar;
-
     @OneToMany(mappedBy = "fkRendVar")
     private Set<UsuRendaVar> fkRendVar = new HashSet<>();
+
+    public Set<UsuRendaVar> getFkRendVar() {
+        return fkRendVar;
+    }
+
+    public void setFkRendVar(Set<UsuRendaVar> fkRendVar) {
+        this.fkRendVar = fkRendVar;
+    }
 
     public Long getIdRendaVariavel() {
         return idRendaVariavel;
@@ -44,27 +47,4 @@ public class RendaVariavel {
         this.rendaVariavel = rendaVariavel;
     }
 
-    public Date getMesAno() {
-        return mesAno;
-    }
-
-    public void setMesAno(Date mesAno) {
-        this.mesAno = mesAno;
-    }
-
-    public Double getValorRendVar() {
-        return valorRendVar;
-    }
-
-    public void setValorRendVar(Double valorRendVar) {
-        this.valorRendVar = valorRendVar;
-    }
-
-    public Set<UsuRendaVar> getFkRendVar() {
-        return fkRendVar;
-    }
-
-    public void setFkRendVar(Set<UsuRendaVar> fkRendVar) {
-        this.fkRendVar = fkRendVar;
-    }
 }

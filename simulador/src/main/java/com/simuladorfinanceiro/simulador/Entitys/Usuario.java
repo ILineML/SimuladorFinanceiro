@@ -4,6 +4,7 @@ import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,38 +18,77 @@ public class Usuario {
     @GeneratedValue(generator = "usuario", strategy = GenerationType.SEQUENCE)
     private Long idUsu;
 
-    @Column(name = "nmUser", length = 20)
+    @Column(name = "nmUser", length = 20, unique = true)
+
     private String nmUser;
 
     @Column(name = "nmCliente", length = 90)
     private String nmCliente;
 
-    @Column(name = "emailUser", unique = true)
-    @Email
+    @Column(name = "emailUser", unique = true, length = 100)
     private String email;
 
     @Column(name = "senhaUser", length = 14)
     private String senha;
-
+/*
     @Column(name = "ftPerfil")
     @Lob
-    private byte[] ftPerfil;
+    private Byte[] ftPerfil;*/
+
+    @OneToMany(mappedBy = "fkUsuInv")
+    private Set<UsuInvestimentos> fkUsuInv = new HashSet<>();
 
     @OneToMany(mappedBy = "fkUsuRec")
     private Set<UsuReceita> fkUsuRec = new HashSet<>();
 
-    @OneToMany(mappedBy = "fkUsuRF")
-    private Set<UsuRendaFix> fkUsuRF = new HashSet<>();
+    @OneToMany(mappedBy = "fkUsuRendFix")
+    private Set<UsuRendaFix> fkUsuRendFix = new HashSet<>();
 
-    @OneToMany(mappedBy = "fkUsuRV")
-    private Set<UsuRendaVar> fkUsuRV = new HashSet<>();
-
-    @OneToMany(mappedBy = "fkUsuInv")
-    private Set<UsuInvestimentos> fkUsuIn = new HashSet<>();
+    @OneToMany(mappedBy = "fkUsuRendVar")
+    private Set<UsuRendaVar> fkUsuRendVar = new HashSet<>();
 
     @OneToMany(mappedBy = "fkUsuUrgen")
     private Set<UsuUrgencia> fkUsuUrgen = new HashSet<>();
 
+    public Set<UsuInvestimentos> getFkUsuInv() {
+        return fkUsuInv;
+    }
+
+    public void setFkUsuInv(Set<UsuInvestimentos> fkUsuInv) {
+        this.fkUsuInv = fkUsuInv;
+    }
+
+    public Set<UsuReceita> getFkUsuRec() {
+        return fkUsuRec;
+    }
+
+    public void setFkUsuRec(Set<UsuReceita> fkUsuRec) {
+        this.fkUsuRec = fkUsuRec;
+    }
+
+    public Set<UsuRendaFix> getFkUsuRendFix() {
+        return fkUsuRendFix;
+    }
+
+    public void setFkUsuRendFix(Set<UsuRendaFix> fkUsuRendFix) {
+        this.fkUsuRendFix = fkUsuRendFix;
+    }
+
+    public Set<UsuRendaVar> getFkUsuRendVar() {
+        return fkUsuRendVar;
+    }
+
+    public void setFkUsuRendaVar(Set<UsuRendaVar> fkUsuRendVar) {
+        this.fkUsuRendVar = fkUsuRendVar;
+    }
+
+    public Set<UsuUrgencia> getFkUsuUrgen() {
+        return fkUsuUrgen;
+    }
+
+    public void setFkUsuUrgen(Set<UsuUrgencia> fkUsuUrgen) {
+        this.fkUsuUrgen = fkUsuUrgen;
+    }
 
     public Long getIdUsu() {
         return idUsu;
@@ -89,56 +129,12 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-    public byte[] getFtPerfil() {
+/*
+    public Byte[] getFtPerfil() {
         return ftPerfil;
     }
 
-    public void setFtPerfil(byte[] ftPerfil) {
+    public void setFtPerfil(Byte[] ftPerfil) {
         this.ftPerfil = ftPerfil;
-    }
-
-    public Set<UsuReceita> getFkUsuRec() {
-        return fkUsuRec;
-    }
-
-    public void setFkUsu(Set<UsuReceita> fkUsuRec) {
-        this.fkUsuRec = fkUsuRec;
-    }
-
-    public void setFkUsuRec(Set<UsuReceita> fkUsuRec) {
-        this.fkUsuRec = fkUsuRec;
-    }
-
-    public Set<UsuRendaFix> getFkUsuRF() {
-        return fkUsuRF;
-    }
-
-    public void setFkUsuRF(Set<UsuRendaFix> fkUsuRF) {
-        this.fkUsuRF = fkUsuRF;
-    }
-
-    public Set<UsuRendaVar> getFkUsuRV() {
-        return fkUsuRV;
-    }
-
-    public void setFkUsuRV(Set<UsuRendaVar> fkUsuRV) {
-        this.fkUsuRV = fkUsuRV;
-    }
-
-    public Set<UsuInvestimentos> getFkUsuIn() {
-        return fkUsuIn;
-    }
-
-    public void setFkUsuIn(Set<UsuInvestimentos> fkUsuIn) {
-        this.fkUsuIn = fkUsuIn;
-    }
-
-    public Set<UsuUrgencia> getFkUsuUrgen() {
-        return fkUsuUrgen;
-    }
-
-    public void setFkUsuUrgen(Set<UsuUrgencia> fkUsuUrgen) {
-        this.fkUsuUrgen = fkUsuUrgen;
-    }
+    }*/
 }

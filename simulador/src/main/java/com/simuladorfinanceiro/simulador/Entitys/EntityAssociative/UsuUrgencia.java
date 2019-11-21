@@ -10,20 +10,31 @@ import java.util.Date;
 @Table(name = "TBUSUURGENCIA")
 public class UsuUrgencia {
 
+    @Id
+    @GeneratedValue
+    private Long usuUrgenID;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsu")
     private Usuario fkUsuUrgen;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Urgencia fkUrgencia;
+    @JoinColumn(name = "idRendaVariavel")
+    private Urgencia fkUrgen;
 
-    @Id
+    @Column(name = "mesAno")
     private Date ano;
-
-    @Column(name = "mes")
-    private Integer mes;
 
     @Column(name ="valorUrgencia")
     private Double valorUrgencia;
+
+    public Long getUsuUrgenID() {
+        return usuUrgenID;
+    }
+
+    public void setUsuUrgenID(Long usuUrgenID) {
+        this.usuUrgenID = usuUrgenID;
+    }
 
     public Usuario getFkUsuUrgen() {
         return fkUsuUrgen;
@@ -33,12 +44,12 @@ public class UsuUrgencia {
         this.fkUsuUrgen = fkUsuUrgen;
     }
 
-    public Urgencia getFkUrgencia() {
-        return fkUrgencia;
+    public Urgencia getFkUrgen() {
+        return fkUrgen;
     }
 
-    public void setFkUrgencia(Urgencia fkUrgencia) {
-        this.fkUrgencia = fkUrgencia;
+    public void setFkUrgen(Urgencia fkUrgen) {
+        this.fkUrgen = fkUrgen;
     }
 
     public Date getAno() {
@@ -47,14 +58,6 @@ public class UsuUrgencia {
 
     public void setAno(Date ano) {
         this.ano = ano;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
     }
 
     public Double getValorUrgencia() {

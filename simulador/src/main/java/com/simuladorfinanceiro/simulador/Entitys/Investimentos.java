@@ -3,6 +3,7 @@ package com.simuladorfinanceiro.simulador.Entitys;
 import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuInvestimentos;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "TBINVESTIMENTOS")
 @SequenceGenerator(name = "investimentos", sequenceName = "seqTbInv", allocationSize = 1)
-public class Investimentos {
+public class Investimentos{
 
     @Id
     @GeneratedValue(generator = "investimentos", strategy = GenerationType.SEQUENCE)
@@ -19,15 +20,16 @@ public class Investimentos {
     @Column(name = "Investimento")
     private String investimento;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "mesAno")
-    private Date mesAno;
+    @OneToMany(mappedBy = "fkInv")
+    private Set<UsuInvestimentos> fkInv = new HashSet<>();
 
-    @Column(name = "valorInvestimento")
-    private Double valorInvest;
+    public Set<UsuInvestimentos> getFkInv() {
+        return fkInv;
+    }
 
-    @OneToMany(mappedBy = "fkInvestimento")
-    private Set<UsuInvestimentos> fkInvestimento = new HashSet<>();
+    public void setFkInv(Set<UsuInvestimentos> fkInv) {
+        this.fkInv = fkInv;
+    }
 
     public Long getIdInvestimento() {
         return idInvestimento;
@@ -45,27 +47,4 @@ public class Investimentos {
         this.investimento = investimento;
     }
 
-    public Date getMesAno() {
-        return mesAno;
-    }
-
-    public void setMesAno(Date mesAno) {
-        this.mesAno = mesAno;
-    }
-
-    public Double getValorInvest() {
-        return valorInvest;
-    }
-
-    public void setValorInvest(Double valorInvest) {
-        this.valorInvest = valorInvest;
-    }
-
-    public Set<UsuInvestimentos> getFkInvestimento() {
-        return fkInvestimento;
-    }
-
-    public void setFkInvestimento(Set<UsuInvestimentos> fkInvestimento) {
-        this.fkInvestimento = fkInvestimento;
-    }
 }

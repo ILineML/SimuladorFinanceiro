@@ -1,13 +1,22 @@
 package com.simuladorfinanceiro.simulador.Controllers;
 
-import com.simuladorfinanceiro.simulador.Entitys.Usuario;
-import com.simuladorfinanceiro.simulador.Entitys.UsuarioDAO;
+import com.simuladorfinanceiro.simulador.Entitys.*;
+import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.*;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.print.Pageable;
+import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 
 @Controller
@@ -16,6 +25,41 @@ public class ApplicationController {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
+    @Autowired
+    private ReceitaDAO receitaDAO;
+
+    @Autowired
+    private InvestimentosDAO investimentosDAO;
+
+    @Autowired
+    private RendaVariavelDAO rendaVariavelDAO;
+
+    @Autowired
+    private RendaFixDAO rendaFixDAO;
+
+    @Autowired
+    private UrgenciaDAO urgenciaDAO;
+
+    @Autowired
+    private UsuReceitaDAO usuReceitaDAO;
+
+    @Autowired
+    private UsuInvestimentosDAO usuInvestimentosDAO;
+
+    @Autowired
+    private UsuRendaFixDAO usuRendaFixDao;
+
+    @Autowired
+    private UsuRendaVarDAO usuRendaVarDAO;
+
+    @Autowired
+    private UsuUrgenciaDAO usuUrgenciaDAO;
+
+    @GetMapping("/cadInvestimento")
+    public String pageCadInv(Model model){
+        return "cadInvestimentos";
+    }
+
     @GetMapping("/cadastro")
     public String pageCadastro(){
         return "register";
@@ -23,7 +67,7 @@ public class ApplicationController {
 
     @GetMapping("/charts")
     public String pageCharts(){
-        return "charts";
+        return "graficos";
     }
 
     @GetMapping("/esqueci-senha")
@@ -32,13 +76,14 @@ public class ApplicationController {
     }
 
     @GetMapping("/cadReceita")
-    public String pageCadRec(){
+    public String pageCadRec(Model model){
+
         return "cadReceita";
     }
 
-    @GetMapping("/index")
-    public String pageIndex(){
-        return "index";
+    @GetMapping("/cadUrgencias")
+    public String pageUrgen(){
+        return "cadUrgen";
     }
 
     @GetMapping("/login")
@@ -46,27 +91,39 @@ public class ApplicationController {
         return "login";
     }
 
-    @GetMapping("/tables")
-    public String pageTables(){
-        return "tables";
+    @GetMapping("/cadRendas")
+    public String pageRendas(){
+        return "cadRendas";
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrarUsu(@RequestParam("firstName") String nome, @RequestParam("lastName") String sobrenome,
-                               @RequestParam("inputUser") String nmUser, @RequestParam("inputEmail") String email,
-                               @RequestParam("inputPassoword") String senha, @RequestParam("ftPerfil") byte[] ftPerfil){
+    @ResponseBody
+    public ResponseEntity<String> cadastrarUsu(@RequestParam("nmCliente") String nmCliente, @RequestParam("nmUser") String nmUser,
+                                       @RequestParam("email") String email, @RequestParam("senha") String senha){
 
         Usuario user = new Usuario();
-
-        user.setNmCliente(nome + sobrenome);
+        user.setNmCliente(nmCliente);
         user.setNmUser(nmUser);
         user.setEmail(email);
         user.setSenha(senha);
-        user.setFtPerfil(ftPerfil);
 
-        usuarioDAO.save(user);
+        try{
+            usuarioDAO.save(user);
+        } catch (DataIntegrityViolationException sql){
 
-        return "redirect:/login";
+            if(usuarioDAO.findEmail(email) == null){
+                return new ResponseEntity("Nome de usuário já está sendo utilizado.", HttpStatus.NOT_ACCEPTABLE);
+            } else{
+                return new ResponseEntity("O email já está sendo utilizado.", HttpStatus.NOT_ACCEPTABLE);
+            }
+
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity("/login", HttpStatus.OK);
     }
 
     @GetMapping("/entrar")
@@ -76,11 +133,26 @@ public class ApplicationController {
             model.addAttribute("verificacao", 0);
             return "/login";
         } else{
-
             model.addAttribute("login", usuarioDAO.findLogin(login, senha));
-            return "/charts";
+            return "/cadReceita";
         }
 
     }
+
+    @PostMapping("/cadReceitas")
+    public String cadastrarReceitas(@RequestParam("txtReceita") String receita,
+                                    @RequestParam("txtValor") Double valor, Receita rec, UsuReceita usuRec,
+                                    @RequestParam("idUser") Usuario id){
+
+/*
+            rec.setReceita(receita);
+            receitaDAO.save(rec);
+            usuRec.setFkUsuRec(id);
+            usuRec.setValorReceita(valor);
+            usuReceitaDAO.save(usuRec);
+*/
+        return "redirect:/cadReceita";
+    }
+
 
 }

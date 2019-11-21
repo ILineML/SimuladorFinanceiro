@@ -9,20 +9,32 @@ import java.util.Date;
 @Entity
 @Table(name = "TBUSUINVESTIMENTOS")
 public class UsuInvestimentos {
+
+    @Id
+    @GeneratedValue
+    private Long UsuInvID;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsu")
     private Usuario fkUsuInv;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Investimentos fkInvestimento;
+    @JoinColumn(name = "idInvestimento")
+    private Investimentos fkInv;
 
-    @Id
+    @Column(name = "mesAno")
     private Date ano;
-
-    @Column(name = "mes")
-    private Integer mes;
 
     @Column(name ="valorInvestimento")
     private Double valorInvestimento;
+
+    public Long getUsuInvID() {
+        return UsuInvID;
+    }
+
+    public void setUsuInvID(Long usuInvID) {
+        UsuInvID = usuInvID;
+    }
 
     public Usuario getFkUsuInv() {
         return fkUsuInv;
@@ -32,12 +44,12 @@ public class UsuInvestimentos {
         this.fkUsuInv = fkUsuInv;
     }
 
-    public Investimentos getFkInvestimento() {
-        return fkInvestimento;
+    public Investimentos getFkInv() {
+        return fkInv;
     }
 
-    public void setFkInvestimento(Investimentos fkInvestimento) {
-        this.fkInvestimento = fkInvestimento;
+    public void setFkInv(Investimentos fkInv) {
+        this.fkInv = fkInv;
     }
 
     public Date getAno() {
@@ -46,14 +58,6 @@ public class UsuInvestimentos {
 
     public void setAno(Date ano) {
         this.ano = ano;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
     }
 
     public Double getValorInvestimento() {

@@ -10,27 +10,38 @@ import java.util.Date;
 @Table(name = "TBUSURENDAVAR")
 public class UsuRendaVar {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Usuario fkUsuRV;
+    @Id
+    @GeneratedValue
+    private Long UsuRendaVarID;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsu")
+    private Usuario fkUsuRendVar;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idRendaVariavel")
     private RendaVariavel fkRendVar;
 
-    @Id
+    @Column(name = "mesAno")
     private Date ano;
-
-    @Column(name = "mes")
-    private Integer mes;
 
     @Column(name ="valor")
     private Double valorRendaVar;
 
-    public Usuario getFkUsuRV() {
-        return fkUsuRV;
+    public Long getUsuRendaVarID() {
+        return UsuRendaVarID;
     }
 
-    public void setFkUsuRV(Usuario fkUsuRV) {
-        this.fkUsuRV = fkUsuRV;
+    public void setUsuRendaVarID(Long usuRendaVarID) {
+        UsuRendaVarID = usuRendaVarID;
+    }
+
+    public Usuario getFkUsuRendVar() {
+        return fkUsuRendVar;
+    }
+
+    public void setFkUsuRendVar(Usuario fkUsuRV) {
+        this.fkUsuRendVar = fkUsuRendVar;
     }
 
     public RendaVariavel getFkRendVar() {
@@ -47,14 +58,6 @@ public class UsuRendaVar {
 
     public void setAno(Date ano) {
         this.ano = ano;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
     }
 
     public Double getValorRendaVar() {

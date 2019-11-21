@@ -1,8 +1,10 @@
 package com.simuladorfinanceiro.simulador.Entitys;
 
+import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuInvestimentos;
 import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuReceita;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
@@ -20,6 +22,14 @@ public class Receita {
     @OneToMany(mappedBy = "fkReceita")
     private Set<UsuReceita> fkReceita = new HashSet<>();
 
+    public Set<UsuReceita> getFkReceita() {
+        return fkReceita;
+    }
+
+    public void setFkReceita(Set<UsuReceita> fkReceita) {
+        this.fkReceita = fkReceita;
+    }
+
     public Long getIdReceita() {
         return idReceita;
     }
@@ -36,11 +46,4 @@ public class Receita {
         this.receita = receita;
     }
 
-    public Set<UsuReceita> getFkReceita() {
-        return fkReceita;
-    }
-
-    public void setFkReceita(Set<UsuReceita> fkReceita) {
-        this.fkReceita = fkReceita;
-    }
 }

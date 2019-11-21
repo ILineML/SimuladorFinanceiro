@@ -1,8 +1,10 @@
 package com.simuladorfinanceiro.simulador.Entitys;
 
+import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuInvestimentos;
 import com.simuladorfinanceiro.simulador.Entitys.EntityAssociative.UsuRendaFix;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,15 +21,16 @@ public class RendaFix {
     @Column(name = "rendaFixa")
     private String rendaFixa;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "mesAno")
-    private Date mesAno;
-
-    @Column(name = "valorRendFix")
-    private Double valorRendVar;
-
     @OneToMany(mappedBy = "fkRendFix")
-    private Set<UsuRendaFix> fkRendaFixa = new HashSet<>();
+    private Set<UsuRendaFix> fkRendFix = new HashSet<>();
+
+    public Set<UsuRendaFix> getFkRendFix() {
+        return fkRendFix;
+    }
+
+    public void setFkRendFix(Set<UsuRendaFix> fkRendFix) {
+        this.fkRendFix = fkRendFix;
+    }
 
     public Long getIdRendaFix() {
         return idRendaFix;
@@ -45,27 +48,4 @@ public class RendaFix {
         this.rendaFixa = rendaFixa;
     }
 
-    public Date getMesAno() {
-        return mesAno;
-    }
-
-    public void setMesAno(Date mesAno) {
-        this.mesAno = mesAno;
-    }
-
-    public Double getValorRendVar() {
-        return valorRendVar;
-    }
-
-    public void setValorRendVar(Double valorRendVar) {
-        this.valorRendVar = valorRendVar;
-    }
-
-    public Set<UsuRendaFix> getFkRendaFixa() {
-        return fkRendaFixa;
-    }
-
-    public void setFkRendaFixa(Set<UsuRendaFix> fkRendaFixa) {
-        this.fkRendaFixa = fkRendaFixa;
-    }
 }

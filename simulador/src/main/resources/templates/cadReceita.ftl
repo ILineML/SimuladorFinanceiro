@@ -1,96 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+<#import "commons/nav.ftl" as nav/>
+<#import "commons/components.ftl" as comp/>
 
-<head>
+<@comp.head/>
+<@nav.profile/>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <div class="col-md-9">
+        <div class="profile-content">
+            Receitas são todos os recursos resultantes da venda de uma mercadorias ou de uma prestação de serviços, porém nem
+            todas as receitas vem de vendas ou prestações de serviços. Alugueis, rendimentos de uma aplicação
+            financeira, juros e etc, podem ser uma forma de receitas.
 
-  <title>SB Admin - Login</title>
+            <br><br>
 
-  <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+                <p>
+                    Aqui você pode cadastrar tudo o que entra em dinheiro em cada mês do ano.
+                </p>
 
-  <!-- Custom styles for this template-->
-  <link href="css/sb-admin.css" rel="stylesheet">
+                Temos nossas opções padrões:
 
-</head>
+                <select class="form-control" id="cmbReceita" onchange="btnTroca(cmbReceita, txtReceitaPad, teste)">
+                    <option value="" disabled selected>Selecione uma receita</option>
+                    <option value="1">Salário</option>
+                    <option value="2">Aluguel</option>
+                    <option value="3">Horas Extras</option>
+                    <option value="4">13º Salário</option>
+                </select>
 
-<body class="bg-dark">
+                <br>
 
-  <div class="container">
-    <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Cadastro de Receitas</div>
-      <div class="card-body">
+            <form action="/cadReceitas" method="POST">
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="text" id="txtReceitaPad" name="txtReceita" readonly class="form-control" placeholder="Nova receita" required="required">
+                    </div>
+                </div>
+                <input name="cmbReceita" id="teste">
+                <input name = "idUser" value="${login.idUsu}">
+                <!-- Valor Receita padrão-->
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="number" name="txtValor" class="form-control" placeholder="Valor receita" required="required">
+                    </div>
+                </div>
 
+                <!-- Receita padrão -->
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <button type="submit" class="btn btn-primary">
+                            Adicionar receita
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-        <form action="#" method="POST">
+                <br><br>
 
-          <div class="form-group" id="Campos">
-            <div class="form-label-group">
-              <input type="number" id="inputEmail" name="inputLogin" class="form-control" placeholder="Salário" required="required" autofocus="autofocus">
-              <label for="inputEmail">Salário</label>
-            </div>
-            <br>
-          </div>
+                <p>
+                    Ou você pode adicionar uma receita que ainda não existe:
+                </p>
 
-          <div class="form-group">
-            <span>Nova(s) receitas</span>
-            <div class="form-label-group">
-              <input type="text" id="inputReceita" name="inputReceita" class="form-control" placeholder="Nova Receita" required="required" autofocus="autofocus">
-              <label for="inputReceita">Adicionar nova receita</label>
-            </div>
-            <br>
-            <div class="form-label-group">
-              <input type="text" id="inputValReceita" name="inputValReceita" class="form-control" placeholder="Valor Receita" required="required" autofocus="autofocus">
-              <label for="inputValReceita">Valor Receita</label>
-            </div>
-            <br>
-            <button class="btn btn-secondary btn-block" type="button" id="btnAdi" onclick="btnAdd()">Adicionar</button>
-          </div>
+                <!-- Nova Receita-->
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="text" id="txtReceita" class="form-control" placeholder="Nova receita" required="required">
+                    </div>
+                </div>
 
-          <button class="btn btn-primary btn-block" type="button" id="btnAdi" onclick="btna()">Confirmar</button>
+                <!-- Valor Receita-->
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="number" id="txtValor" class="form-control" placeholder="Valor receita" required="required">
+                    </div>
+                </div>
 
-        </form>
+            <button type="submit" class="btn btn-primary">Confirmar</button>
 
-        <script>
+                <br><br>
 
-          function btnAdd() {
+                    <table class="table" id="tableRec">
+                        <thead>
+                        <tr class="thead-dark">
+                            <th>#</th>
+                            <th>Receita</th>
+                            <th>Valor Receita</th>
+                            <th>Edições</th>
+                        </tr>
+                        </thead>
 
-            var rec = inputReceita.value;
-            var val = inputValReceita.value;
+                        <tbody id="tbReceitas" name="tbReceitas">
+                        </tbody>
 
-            Campos.innerHTML +=
-                    "<div class='form-label-group'>" +
-                    "<input type='number' id='"+rec+"' name='"+rec+"' class='form-control' placeholder='"+rec+"' value = '"+val+"' readonly focus='autofocus'>" +
-                    "<label for='"+rec+"'>"+ rec +"</label>" +
-                    "</div>" +
-                    "<button type='button' class='btn-toolbar' onclick='btnEdit("+rec+")'>Editar</button>"+
-                    "<br>"
+                    </table>
 
-          }
+                    <br><br>
 
-          function btnEdit(edit) {
-            edit.readOnly = false;
-          }
-
-
-
-        </script>
-      </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/config.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-</body>
-
-</html>
+<br>
+<br>

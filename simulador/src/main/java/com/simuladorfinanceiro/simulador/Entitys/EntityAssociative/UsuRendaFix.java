@@ -10,28 +10,38 @@ import java.util.Date;
 @Table(name="TBUSURENDAFIX")
 public class UsuRendaFix {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Usuario fkUsuRF;
+    @Id
+    @GeneratedValue
+    private Long UsuRendFixID;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUsu")
+    private Usuario fkUsuRendFix;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idRendaFix")
     private RendaFix fkRendFix;
 
-    @Id
+    @Column(name = "mesAno")
     private Date ano;
-
-    @Column(name = "mes")
-    private Integer mes;
 
     @Column(name ="valorRendaFix")
     private Double valorRendaFix;
 
-
-    public Usuario getFkUsuRF() {
-        return fkUsuRF;
+    public Long getUsuRendFixID() {
+        return UsuRendFixID;
     }
 
-    public void setFkUsuRF(Usuario fkUsuRF) {
-        this.fkUsuRF = fkUsuRF;
+    public void setUsuRendFixID(Long usuRendFixID) {
+        UsuRendFixID = usuRendFixID;
+    }
+
+    public Usuario getFkUsuRendFix() {
+        return fkUsuRendFix;
+    }
+
+    public void setFkUsuRendFix(Usuario fkUsuRendFix) {
+        this.fkUsuRendFix = fkUsuRendFix;
     }
 
     public RendaFix getFkRendFix() {
@@ -48,14 +58,6 @@ public class UsuRendaFix {
 
     public void setAno(Date ano) {
         this.ano = ano;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
     }
 
     public Double getValorRendaFix() {

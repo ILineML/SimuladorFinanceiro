@@ -1,0 +1,125 @@
+/***
+User Profile Sidebar by @keenthemes
+A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
+Licensed under MIT
+***/
+
+body {
+    background: #F1F3FA!important;
+}
+
+/* Profile container */
+.profile {
+    margin: 20px 0!important;
+}
+
+/* Profile sidebar */
+.profile-sidebar {
+    padding: 20px 0 10px 0!important;
+    background: #fff!important;
+}
+
+.profile-userpic img {
+    width: 150px!important;
+    height: 150px!important;
+    border-radius: 50%!important;
+
+    background-repeat: no-repeat!important;
+    background-position: center center!important;
+    background-size: cover!important;
+
+    float: none!important;
+    margin: 0 auto!important;
+    -webkit-border-radius: 50% !important;
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
+}
+
+.profile-usertitle {
+    text-align: center!important;
+    margin-top: 20px!important;
+}
+
+.profile-usertitle-name {
+    color: #5a7391!important;
+    font-size: 16px!important;
+    font-weight: 600!important;
+    margin-bottom: 7px!important;
+}
+
+.profile-usertitle-job {
+    text-transform: uppercase!important;
+    color: #5b9bd1!important;
+    font-size: 12px!important;
+    font-weight: 600!important;
+    margin-bottom: 15px!important;
+}
+
+.profile-userbuttons {
+    text-align: center!important;
+    margin-top: 10px!important;
+}
+
+.profile-userbuttons .btn {
+    text-transform: uppercase!important;
+    font-size: 11px!important;
+    font-weight: 600!important;
+    padding: 6px 15px!important;
+    margin-right: 5px!important;
+}
+
+.profile-userbuttons .btn:last-child {
+    margin-right: 0px!important;
+}
+
+.profile-usermenu {
+    margin-top: 30px!important;
+}
+
+.profile-usermenu ul li {
+    border-bottom: 1px solid #f0f4f7!important;
+}
+
+.profile-usermenu ul li:last-child {
+    border-bottom: none!important;
+}
+
+.profile-usermenu ul li a {
+    color: #93a3b5!important;
+    font-size: 14px!important;
+    font-weight: 400!important;
+}
+
+.profile-usermenu ul li a i {
+    margin-right: 8px!important;
+    font-size: 14px!important;
+}
+
+.profile-usermenu ul li a:hover {
+    background-color: #fafcfd!important;
+    color: #5b9bd1!important;
+}
+
+.profile-usermenu ul li.active {
+    border-bottom: none!important;
+}
+
+.profile-usermenu ul li.active a {
+    color: #5b9bd1!important;
+    background-color: #f6f9fb!important;
+    border-left: 2px solid #5b9bd1!important;
+    margin-left: -2px!important;
+}
+
+/* Profile Content */
+.profile-content {
+    padding: 20px!important;
+    background: #fff!important;
+    min-height: 460px!important;
+}
+
+/* Icone dinheiro
+.profile-usermenu ul li a i.icon-money {
+    background-image: url("https://image.flaticon.com/icons/svg/858/858151.svg");
+    background-repeat: no-repeat;
+}*/

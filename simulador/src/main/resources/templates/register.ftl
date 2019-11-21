@@ -26,18 +26,18 @@
       <div class="card-header">Criar uma conta</div>
       <div class="card-body">
 
-        <form method="post" action="/cadastrar">
+        <form method="post" action="/cadastrar" id="formCad" name="formCad">
           <div class="form-group">
             <div class="form-row">
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Nome" required="required" autofocus="autofocus">
+                  <input type="text" id="firstName" name="nmCliente" class="form-control" placeholder="Nome" required="required" autofocus="autofocus">
                   <label for="firstName">Nome</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Sobrenome" required="required">
+                  <input type="text" id="lastName" name="nmCliente" class="form-control" placeholder="Sobrenome" required="required">
                   <label for="lastName">Sobrenome</label>
                 </div>
               </div>
@@ -46,14 +46,14 @@
 
           <div class="form-group">
             <div class="form-label-group">
-              <input type="text" id="inputUser" name="inputUser" class="form-control" placeholder="Nome de Usuário" required="required">
+              <input type="text" id="nmUser" name="nmUser" class="form-control" placeholder="Nome de Usuário" required="required">
               <label for="inputUser">Nome de Usuário</label>
             </div>
           </div>
 
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email" required="required">
+              <input type="email" id="email" name="email" class="form-control" placeholder="Email" required="required">
               <label for="inputEmail">Email</label>
             </div>
           </div>
@@ -61,7 +61,7 @@
             <div class="form-row">
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword" name="inputPassoword" class="form-control" placeholder="Senha" required="required">
+                  <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha" required="required">
                   <label for="inputPassword">Senha</label>
                 </div>
               </div>
@@ -72,24 +72,9 @@
                 </div>
               </div>
 
-              <div class="col-md-6" style="margin-top: 25px;">
-                <label>Foto de Perfil</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                </div>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="inputGroupFile01"
-                         aria-describedby="inputGroupFileAddon01" name="ftPerfil">
-                  <label class="custom-file-label" for="inputGroupFile01">Escolher Foto</label>
-                </div>
-              </div>
-
-              </div>
-
             </div>
           </div>
-          <button class="btn btn-primary btn-block" type="submit">Registrar</button>
+          <button class="btn btn-primary btn-block" type="button" onclick="cadastrar()">Registrar</button>
         </form>
 
         <div class="text-center">
@@ -105,7 +90,46 @@
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 </body>
 
 </html>
+
+<script>
+
+  function cadastrar() {
+
+    if(senha.value != confirmPassword.value){
+        swal({
+          title: "Ops!",
+          text: "As senhas não coincidem"
+        });
+      return;
+    }
+
+    var parametros = "nmCliente=" + firstName.value + " " + lastName.value +
+    "&nmUser=" + nmUser.value + "&email=" + email.value + "&senha=" + senha.value;
+
+    $.ajax({
+      url: "/cadastrar",
+      method: "POST",
+      data: parametros,
+
+      error: function(data){
+        swal({
+              title: "Ops!",
+              text: data.responseText
+        });
+      },
+
+      success: function(data){
+        window.location.href = data;
+      }
+
+    })
+
+  }
+
+
+</script>
