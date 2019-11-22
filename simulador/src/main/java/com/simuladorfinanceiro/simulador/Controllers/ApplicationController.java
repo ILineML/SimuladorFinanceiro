@@ -8,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.print.Pageable;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 @Controller
@@ -27,6 +31,9 @@ public class ApplicationController {
 
     @Autowired
     private ReceitaDAO receitaDAO;
+
+    private Usuario user;
+    private Usuario dadosUser = null;
 
     @Autowired
     private InvestimentosDAO investimentosDAO;
@@ -55,9 +62,18 @@ public class ApplicationController {
     @Autowired
     private UsuUrgenciaDAO usuUrgenciaDAO;
 
+    @Autowired
+    JavaMailSender javaMailSender;
+
+    String codigo = "";
+
     @GetMapping("/cadInvestimento")
-    public String pageCadInv(Model model){
-        return "cadInvestimentos";
+    public String pageCadInv(){
+        if(dadosUser != null){
+            return "cadInvestimentos";
+        } else{
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/cadastro")
@@ -67,7 +83,11 @@ public class ApplicationController {
 
     @GetMapping("/charts")
     public String pageCharts(){
-        return "graficos";
+        if(dadosUser != null){
+            return "graficos";
+        } else{
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/esqueci-senha")
@@ -75,15 +95,27 @@ public class ApplicationController {
         return "forgot-password";
     }
 
-    @GetMapping("/cadReceita")
-    public String pageCadRec(Model model){
+    @GetMapping("/confirm")
+    public String pageConfirmSenha(){
+        return "confirm-password";
+    }
 
-        return "cadReceita";
+    @GetMapping("/cadReceita")
+    public String pageCadRec(){
+        if(dadosUser != null){
+            return "cadReceita";
+        } else{
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/cadUrgencias")
     public String pageUrgen(){
-        return "cadUrgen";
+        if(dadosUser != null){
+            return "cadUrgen";
+        } else{
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/login")
@@ -93,7 +125,11 @@ public class ApplicationController {
 
     @GetMapping("/cadRendas")
     public String pageRendas(){
-        return "cadRendas";
+        if(dadosUser != null){
+            return "cadRendas";
+        } else{
+            return "redirect:/login";
+        }
     }
 
     @PostMapping("/cadastrar")
@@ -101,40 +137,68 @@ public class ApplicationController {
     public ResponseEntity<String> cadastrarUsu(@RequestParam("nmCliente") String nmCliente, @RequestParam("nmUser") String nmUser,
                                        @RequestParam("email") String email, @RequestParam("senha") String senha){
 
-        Usuario user = new Usuario();
+        if(usuarioDAO.findEmail(email) != null){
+            return new ResponseEntity("O email já está sendo utilizado.", HttpStatus.PRECONDITION_FAILED);
+        } else if(usuarioDAO.findUserName(nmUser) != null){
+            return new ResponseEntity("Nome de usuário já está sendo utilizado.", HttpStatus.PRECONDITION_FAILED);
+        }
+
+        List<String> letras = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+                "O", "P", "Q", "R", "S", "T", "U", "V", "W", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                "#");
+
+        codigo = "";
+        Random aleatorio = new Random();
+
+        for(int i = 0; i < 8; i++){
+            codigo += letras.get(aleatorio.nextInt(letras.size()) - 1);
+        }
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setSubject("Código de confirmação de email");
+        mailMessage.setText("Este é o código de confirmação de email: " + codigo + "\n");
+        mailMessage.setText(mailMessage.getText() + "Você pode confirmar o código clicando neste link: \n");
+        mailMessage.setText(mailMessage.getText() + "http://localhost:8080/confirm");
+        mailMessage.setTo(email);
+
+        user = new Usuario();
         user.setNmCliente(nmCliente);
         user.setNmUser(nmUser);
         user.setEmail(email);
         user.setSenha(senha);
 
         try{
-            usuarioDAO.save(user);
-        } catch (DataIntegrityViolationException sql){
-
-            if(usuarioDAO.findEmail(email) == null){
-                return new ResponseEntity("Nome de usuário já está sendo utilizado.", HttpStatus.NOT_ACCEPTABLE);
-            } else{
-                return new ResponseEntity("O email já está sendo utilizado.", HttpStatus.NOT_ACCEPTABLE);
-            }
-
-
-        } catch (Exception ex){
+            javaMailSender.send(mailMessage);
+        } catch(Exception ex){
             ex.printStackTrace();
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity("Ocorreu um erro ao enviar o email de confirmação", HttpStatus.PRECONDITION_FAILED);
         }
 
-        return new ResponseEntity("/login", HttpStatus.OK);
+        return new ResponseEntity("Foi enviado um código de confirmação para o email: \n " + email, HttpStatus.OK);
+    }
+
+    @PostMapping("/cofirmacaoCode")
+    @ResponseBody
+    public ResponseEntity<String> cadastrarUser(@RequestParam("codigo") String cod){
+
+        if(cod.equals(codigo)){
+          usuarioDAO.save(user);
+          return new ResponseEntity("/login", HttpStatus.OK);
+        } else{
+            return new ResponseEntity("Os códigos não se coincidem", HttpStatus.NOT_ACCEPTABLE);
+        }
+
     }
 
     @GetMapping("/entrar")
-    public String entrar(@RequestParam("inputLogin") String login, @RequestParam("inputSenha") String senha, Model model){
+    public ResponseEntity<String> entrar(@RequestParam("login") String login, @RequestParam("senha") String senha){
 
-        if(usuarioDAO.findLogin(login, senha) == null){
-            model.addAttribute("verificacao", 0);
-            return "/login";
+        dadosUser = usuarioDAO.findLogin(login, senha);
+
+        if(dadosUser == null){
+            return new ResponseEntity(HttpStatus.PRECONDITION_FAILED);
         } else{
-            model.addAttribute("login", usuarioDAO.findLogin(login, senha));
-            return "/cadReceita";
+            return new ResponseEntity("/cadReceita", HttpStatus.OK);
         }
 
     }

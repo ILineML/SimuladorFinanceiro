@@ -124,7 +124,10 @@
       },
 
       success: function(data){
-        window.location.href = data;
+        swal({
+            title: "Falta pouco! :)",
+            text: data
+        });
       }
 
     })

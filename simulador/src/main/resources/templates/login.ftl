@@ -25,29 +25,19 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form action="/entrar" method="get">
           <div class="form-group">
             <div class="form-label-group">
-              <input type="text" id="inputEmail" name="inputLogin" class="form-control" placeholder="Email ou Nome de Usuário" required="required" autofocus="autofocus">
-              <label for="inputEmail">Email ou Nome de Usuário</label>
+              <input type="text" id="txtLogin" name="txtLogin" class="form-control" placeholder="Email ou Nome de Usuário" required="required" autofocus="autofocus">
+              <label for="txtLogin">Email ou Nome de Usuário</label>
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="password" id="inputPassword" name="inputSenha" class="form-control" placeholder="Senha" required="required">
-              <label for="inputPassword">Senha</label>
+              <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Senha" required="required">
+              <label for="txtSenha">Senha</label>
             </div>
           </div>
-          <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" value="remember-me">
-                Lembrar senha
-              </label>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
-        </form>
+          <button class="btn btn-primary btn-block" type="button" onclick="btnLogin()">Entrar</button>
         <div class="text-center">
           <a class="d-block small mt-3" href="/cadastro">Cadastrar-se</a>
           <a class="d-block small" href="/esqueci-senha">Esqueceu sua senha?</a>
@@ -56,18 +46,46 @@
     </div>
   </div>
 
-  <#if verificacao ? has_content>
-    <h1>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h1>
-  </#if>
-
- 
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 </body>
 
 </html>
+
+<script>
+  function btnLogin(){
+
+    if(txtLogin.value == "" || txtSenha.value == ""){
+        swal({
+            title: "Ops!",
+            text: "Preencha todos os campos para continuar"
+        });
+        return;
+    }
+
+    $.ajax({
+        url: "/entrar",
+        method: "GET",
+        data: "login=" + txtLogin.value + "&senha=" + txtSenha.value,
+
+        error: function (data) {
+            console.log(data);
+            swal({
+                title: "Ops!",
+                text: "Usuário ou senha incorretos"
+            });
+        },
+
+        success: function (data) {
+            window.location.href = data;
+        }
+
+    })
+
+  }
+</script>
