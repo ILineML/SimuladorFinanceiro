@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.awt.print.Pageable;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -33,7 +34,6 @@ public class ApplicationController {
     private ReceitaDAO receitaDAO;
 
     private Usuario user;
-    private Usuario dadosUser = null;
 
     @Autowired
     private InvestimentosDAO investimentosDAO;
@@ -69,11 +69,7 @@ public class ApplicationController {
 
     @GetMapping("/cadInvestimento")
     public String pageCadInv(){
-        if(dadosUser != null){
             return "cadInvestimentos";
-        } else{
-            return "redirect:/login";
-        }
     }
 
     @GetMapping("/cadastro")
@@ -83,11 +79,7 @@ public class ApplicationController {
 
     @GetMapping("/charts")
     public String pageCharts(){
-        if(dadosUser != null){
             return "graficos";
-        } else{
-            return "redirect:/login";
-        }
     }
 
     @GetMapping("/esqueci-senha")
@@ -102,20 +94,12 @@ public class ApplicationController {
 
     @GetMapping("/cadReceita")
     public String pageCadRec(){
-        if(dadosUser != null){
             return "cadReceita";
-        } else{
-            return "redirect:/login";
-        }
     }
 
     @GetMapping("/cadUrgencias")
     public String pageUrgen(){
-        if(dadosUser != null){
             return "cadUrgen";
-        } else{
-            return "redirect:/login";
-        }
     }
 
     @GetMapping("/login")
@@ -125,11 +109,7 @@ public class ApplicationController {
 
     @GetMapping("/cadRendas")
     public String pageRendas(){
-        if(dadosUser != null){
             return "cadRendas";
-        } else{
-            return "redirect:/login";
-        }
     }
 
     @PostMapping("/cadastrar")
@@ -191,13 +171,15 @@ public class ApplicationController {
     }
 
     @GetMapping("/entrar")
-    public ResponseEntity<String> entrar(@RequestParam("login") String login, @RequestParam("senha") String senha){
+    public ResponseEntity<String> entrar(@RequestParam("login") String login, @RequestParam("senha") String senha,
+                                         HttpSession session){
 
-        dadosUser = usuarioDAO.findLogin(login, senha);
+        Usuario dadosUser = usuarioDAO.findLogin(login, senha);
 
         if(dadosUser == null){
             return new ResponseEntity(HttpStatus.PRECONDITION_FAILED);
         } else{
+            session.setAttribute("userLogado", dadosUser);
             return new ResponseEntity("/cadReceita", HttpStatus.OK);
         }
 
@@ -218,5 +200,10 @@ public class ApplicationController {
         return "redirect:/cadReceita";
     }
 
+    @RequestMapping("/sair")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 
 }
