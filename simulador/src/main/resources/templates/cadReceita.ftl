@@ -6,7 +6,7 @@
     <meta name="author" content="">
 
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="/css/profile.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
@@ -117,7 +117,7 @@
 
                 Temos nossas opções padrões:
 
-                <select class="form-control" id="cmbReceita">
+                <select class="form-control" id="cmbReceita" onchange="changeText()">
                     <option value="" disabled selected>Selecione uma receita</option>
                     <option value="1">Salário</option>
                     <option value="2">Aluguel</option>
@@ -127,7 +127,6 @@
 
                 <br>
 
-                <form action="/cadReceitas" method="POST">
                     <div class="form-group">
                         <div class="form-label-group">
                             <input type="text" id="txtReceitaPad" name="txtReceita" readonly class="form-control" placeholder="Nova receita" required="required">
@@ -137,19 +136,19 @@
                     <!-- Valor Receita padrão-->
                     <div class="form-group">
                         <div class="form-label-group">
-                            <input type="number" name="txtValor" class="form-control" placeholder="Valor receita" required="required">
+                            <input type="number" id="txtValorPad" class="form-control" placeholder="Valor receita" required="required" min="1"
+                            onchange="changeValue(txtValorPad)">
                         </div>
                     </div>
 
                     <!-- Receita padrão -->
                     <div class="form-group">
                         <div class="form-label-group">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="button" class="btn btn-primary" onclick="btnConfirm(txtValorPad, txtReceitaPad, 0, 0)" data-toggle="modal" data-target="#myModal">
                                 Adicionar receita
                             </button>
                         </div>
                     </div>
-                </form>
 
                 <br><br>
 
@@ -167,11 +166,12 @@
                 <!-- Valor Receita-->
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="number" id="txtValor" class="form-control" placeholder="Valor receita" required="required">
+                        <input type="number" id="txtValor" class="form-control" placeholder="Valor receita" required="required" min="1"
+                               onchange="changeValue(txtValor)">
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Confirmar</button>
+                <button type="submit" class="btn btn-primary" onclick="btnConfirm(txtValor, txtReceita, 1, 1)">Confirmar</button>
 
                 <br><br>
 
@@ -202,10 +202,36 @@
 
 </div>
 
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmação de cadastro receita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Receita: <b class="recipe"></b>
+                </p>
+                <p>
+                    Valor: <b class="value"></b>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Salvar mudanças</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src ="js/receitas/cadastrarReceitas.js"></script>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -213,4 +239,3 @@
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-

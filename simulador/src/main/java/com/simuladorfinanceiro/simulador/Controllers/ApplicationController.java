@@ -65,8 +65,6 @@ public class ApplicationController {
     @Autowired
     JavaMailSender javaMailSender;
 
-    String codigo = "";
-
     @GetMapping("/cadInvestimento")
     public String pageCadInv(){
             return "cadInvestimentos";
@@ -89,7 +87,7 @@ public class ApplicationController {
 
     @GetMapping("/confirm")
     public String pageConfirmSenha(){
-        return "confirm-password";
+        return "confirm-code";
     }
 
     @GetMapping("/cadReceita")
@@ -115,7 +113,8 @@ public class ApplicationController {
     @PostMapping("/cadastrar")
     @ResponseBody
     public ResponseEntity<String> cadastrarUsu(@RequestParam("nmCliente") String nmCliente, @RequestParam("nmUser") String nmUser,
-                                       @RequestParam("email") String email, @RequestParam("senha") String senha){
+                                       @RequestParam("email") String email, @RequestParam("senha") String senha,
+                                               HttpSession session){
 
         if(usuarioDAO.findEmail(email) != null){
             return new ResponseEntity("O email já está sendo utilizado.", HttpStatus.PRECONDITION_FAILED);
@@ -127,12 +126,14 @@ public class ApplicationController {
                 "O", "P", "Q", "R", "S", "T", "U", "V", "W", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                 "#");
 
-        codigo = "";
+        String codigo = "";
         Random aleatorio = new Random();
 
         for(int i = 0; i < 8; i++){
             codigo += letras.get(aleatorio.nextInt(letras.size()) - 1);
         }
+
+        session.setAttribute("codigo", codigo);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setSubject("Código de confirmação de email");
@@ -159,11 +160,14 @@ public class ApplicationController {
 
     @PostMapping("/cofirmacaoCode")
     @ResponseBody
-    public ResponseEntity<String> cadastrarUser(@RequestParam("codigo") String cod){
+    public ResponseEntity<String> cadastrarUser(@RequestParam("codigo") String cod, HttpSession session){
 
-        if(cod.equals(codigo)){
+        if(cod.equals(session.getAttribute("codigo"))){
           usuarioDAO.save(user);
           return new ResponseEntity("/login", HttpStatus.OK);
+        } else if(session.getAttribute("codigo") == null){
+            return new ResponseEntity("Este código não existe ou seu tempo expirou. Por favor" +
+                    " tente novamente", HttpStatus.NOT_ACCEPTABLE);
         } else{
             return new ResponseEntity("Os códigos não se coincidem", HttpStatus.NOT_ACCEPTABLE);
         }
